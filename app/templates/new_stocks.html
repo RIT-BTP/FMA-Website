@@ -1,0 +1,16 @@
+{% from "_formhelpers.html" import render_field %}
+{% extends 'base.html' %}
+
+{% block body %}
+<form method=post class="content" enctype="multipart/form-data">
+    <dl>
+        {{ render_field(form.ticker) }}
+        {{ render_field(form.quantity) }}
+        {{ render_field(form.cost) }}
+        {{ render_field(form.index) }}
+        {{ render_field(form.sector) }}
+    </dl>
+    <p><input type=submit value=Register class="btn">
+</form>
+
+{% endblock %}
