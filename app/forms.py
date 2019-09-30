@@ -20,3 +20,14 @@ class StockEntryForm(Form):
     cost = DecimalField("Cost", [validators.DataRequired()])
     index = StringField("Financial Index", [validators.length(min=2, max=20)])
     sector = StringField("Financial Sector", [validators.length(min=1, max=20)])
+
+class StockUpdateForm(Form):
+
+    id= IntegerField("Stock ID", [validators.DataRequired()]
+    ticker = StringField(
+    "Ticker", [validators.Length(min=1, max=10)]
+    )
+    quantity = IntegerField("Quantity")
+    cost = DecimalField("Cost")
+    index = StringField("Financial Index", [validators.length(min=2, max=20)])
+    sector = StringField("Financial Sector", [validators.length(min=1, max=20)])
