@@ -53,7 +53,7 @@ def update_stocks():
             stock.name=form.ticker.data
         if form.quantity.data:
             stock.quantity=form.quantity.data
-        if form.cost.data:
+        if form.cost.data != 0:
             stock.cost=form.cost.data
         if form.index.data:
             stock.index=form.index.data
