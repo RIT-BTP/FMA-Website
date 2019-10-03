@@ -47,8 +47,7 @@ def new_stocks():
 def update_stocks():
     form = StockUpdateForm(request.form)
     if request.method=='POST' and form.validate():
-        stock = Stocks.get(id=form.id.data)
-        data = {}
+        stock = Stocks.get(id=form.id.data)[0]
         if form.ticker.data:
             stock.name=form.ticker.data
         if form.quantity.data:
