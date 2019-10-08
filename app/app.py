@@ -14,7 +14,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 from models import Stocks
-from forms import StockEntryForm, StockUpdateForm
+from forms import StockEntryForm, StockUpdateForm, StockDeleteForm
 
 # from functions import user_check
 
@@ -61,3 +61,13 @@ def update_stocks():
         db.session.commit()
         return redirect(url_for("home"))
     return render_template("update_stocks.html",form=form)
+
+@app.route("/delete stocks", methods=['GET', "POST"])
+def delete_stocks():
+    form = StockDeleteForm(request.form)
+    if request.method == 'POST' and form.validate():
+        stock = Stocks.get(id=form.id.data)[0]
+        db.session.delete(stock)
+        db.session.commit()
+        return redirect(url_for("home"))
+    return render_template("delete_stocks.html",form=form)

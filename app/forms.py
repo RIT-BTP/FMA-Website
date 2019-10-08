@@ -22,7 +22,6 @@ class StockEntryForm(Form):
     sector = StringField("Financial Sector", [validators.length(min=1, max=20)])
 
 class StockUpdateForm(Form):
-
     id = IntegerField("Stock ID", [validators.DataRequired()])
     ticker = StringField(
     "Ticker"
@@ -31,3 +30,6 @@ class StockUpdateForm(Form):
     cost = DecimalField("Cost")
     index = StringField("Financial Index")
     sector = StringField("Financial Sector")
+
+class StockDeleteForm(Form):
+    id = IntegerField("Stock ID", [validators.DataRequired()])
