@@ -23,7 +23,7 @@ class StockEntryForm(Form):
 
 class StockUpdateForm(Form):
 
-    id= IntegerField("Stock ID", [validators.DataRequired()]
+    id = IntegerField("Stock ID", [validators.DataRequired()])
     ticker = StringField(
     "Ticker"
     )
