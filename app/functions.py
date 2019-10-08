@@ -21,7 +21,6 @@ def construct_data():
         ],
     }
 
-
     # data: {
     #     labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
     #     datasets: [
@@ -48,17 +47,18 @@ def construct_data():
     #     ],
     # }
 
-class bsoption():
 
+class bsoption:
     def __init__(stock):
-        url = f'https://finance.yahoo.com/quote/{stock}'
-        html  = urlopen(url)
+        url = f"https://finance.yahoo.com/quote/{stock}"
+        html = urlopen(url)
         self.soup = BeautifulSoup(html)
 
-class apioption():
 
+class apioption:
     def __init__(stock):
         pass
+
 
 if __name__ == "__main__":
     bs = bsoption("AAPL")
