@@ -43,31 +43,33 @@ def new_stocks():
         return redirect(url_for("home"))
     return render_template("new_stocks.html", form=form)
 
-@app.route("/update stocks", methods=["GET", "POST"] )
+
+@app.route("/update stocks", methods=["GET", "POST"])
 def update_stocks():
     form = StockUpdateForm(request.form)
-    if request.method=='POST' and form.validate():
+    if request.method == "POST" and form.validate():
         stock = Stocks.get(id=form.id.data)[0]
         if form.ticker.data:
-            stock.name=form.ticker.data
+            stock.name = form.ticker.data
         if form.quantity.data:
-            stock.quantity=form.quantity.data
+            stock.quantity = form.quantity.data
         if form.cost.data != 0:
-            stock.cost=form.cost.data
+            stock.cost = form.cost.data
         if form.index.data:
-            stock.index=form.index.data
+            stock.index = form.index.data
         if form.sector.data:
-            stock.sector=form.sector.data
+            stock.sector = form.sector.data
         db.session.commit()
         return redirect(url_for("home"))
-    return render_template("update_stocks.html",form=form)
+    return render_template("update_stocks.html", form=form)
 
-@app.route("/delete stocks", methods=['GET', "POST"])
+
+@app.route("/delete stocks", methods=["GET", "POST"])
 def delete_stocks():
     form = StockDeleteForm(request.form)
-    if request.method == 'POST' and form.validate():
+    if request.method == "POST" and form.validate():
         stock = Stocks.get(id=form.id.data)[0]
         db.session.delete(stock)
         db.session.commit()
         return redirect(url_for("home"))
-    return render_template("delete_stocks.html",form=form)
+    return render_template("delete_stocks.html", form=form)
