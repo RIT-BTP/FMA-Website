@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-<link rel="stylesheet" type="text/css" media="screen" href="static/home.css" />
+/*<link rel="stylesheet" type="text/css" media="screen" href="static/home.css" />*/
 
 {% block head %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -11,12 +11,12 @@
         <div class="column">
                 <h1>Equity Sectors</h1>
                 <div class='data'>
-                    <canvas id="myChart" width="20" height="20"></canvas>
+                    <canvas id="myChart" width="10" height="10"></canvas>
                 </div>
         </div>
         <div class="column">
             <div class='data'>
-                <canvas id="assetChart" width="20" height="20"></canvas>
+                <canvas id="assetChart" width="10" height="10"></canvas>
             </div>
         </div>
     </div>
@@ -86,12 +86,23 @@
             label: ['Line Chart'],
             xAxisID: ['x Axis'],
             yAxisID: ['y Axis'],
+            /*datasets: [{
+                data: [10, 20, 30, 40, 50, 60],
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],*/
             datasets: [{
                 data:[{x: 10, y:20},{x:15, y:10},{x:12, y:8}],
-            borderWidth: 1,
-            borderColor: ['rgba(255, 99, 132, 0.2)']
+            borderWidth: 10,
+            borderColor: ['rgba(255, 99, 132, 0.2)'],
+            borderCapStyle: ['round'],
+            backgroundColor: ['rgba(255, 255, 255, 0)']
             }]
         }
     });
 </script>
+<style>
+.data {
+    width: 50%;
+    height: 50%;
+}
+</style>
 {% endblock %}
