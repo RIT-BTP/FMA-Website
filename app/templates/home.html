@@ -1,4 +1,23 @@
 {% extends 'base.html' %}
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/x-icon" href="../static/fmalogo.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" media="screen" href="static/home.css" />
+    {% block head %}
+    <title>Base</title>
+    {% endblock %}
+</head>
 /*<link rel="stylesheet" type="text/css" media="screen" href="static/home.css" />*/
 
 {% block head %}
@@ -6,24 +25,34 @@
 {% endblock %}
 
 {% block body %}
-<div class='container'>
-    <div class="row">
-        <div class="column">
-                <h1>Equity Sectors</h1>
-                <div class='data'>
-                    <canvas id="myChart" width="10" height="10"></canvas>
-                </div>
+<div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Equity Chart</h5>
+          <canvas id="myChart"></canvas>
         </div>
-        <div class="column">
-            <div class='data'>
-                <canvas id="assetChart" width="10" height="10"></canvas>
-            </div>
-        </div>
+      </div>
     </div>
-    <div class='data'>
-        <canvas id="lineChart" width="20" height="20"></canvas>
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Asset Chart</h5>
+          <canvas id="assetChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Line Chart</h5>
+        <div class='data'>
+            <canvas id="lineChart" width="20" height="20"></canvas>
+        </div>        
     </div>
 </div>
+  
+
 <script>
     var ctx = document.getElementById('myChart');
     var myChart = new Chart(ctx, {
@@ -54,30 +83,31 @@
     });
 </script>
 <script>
-    var ctx = document.getElementById('assetChart');
-    var myChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green'],
-            datasets: [{
-                data: [12, 19, 3, 5],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)'
-                ],
-                borderWidth: 1
-            }]
-        }
-    });
+var ctx = document.getElementById('assetChart');
+var myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green'],
+        datasets: [{
+            data: [12, 19, 3, 5],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)'
+            ],
+            borderWidth: 1
+        }]
+    }
+});
 </script>
+
 <script>
     var ctx = document.getElementById('lineChart');
     var myChart = new Chart(ctx, {
@@ -90,8 +120,21 @@
                 data: [10, 20, 30, 40, 50, 60],
                 labels: ['January', 'February', 'March', 'April', 'May', 'June'],*/
             datasets: [{
-                data:[{x: 10, y:20},{x:15, y:10},{x:12, y:8}],
+                label: 'Line 1',
+                data:[{x: 10, y:20},{x:15, y:10},{x:12, y:8}, {x:12, y:12}]},
+                {label: 'Line 2',
+                data:[{x:20, y:20},{x:18, y:17},{x: 10, y:20},{x:15, y:10}]}],
             borderWidth: 10,
+            options: {
+                scales:{
+                    yAxes:[{
+                        ticks:{
+                            suggestedMin: 0,
+                            suggestedMax: 30
+                        }
+                    }]
+                }
+            },
             borderColor: ['rgba(255, 99, 132, 0.2)'],
             borderCapStyle: ['round'],
             backgroundColor: ['rgba(255, 255, 255, 0)']
