@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 <head>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -18,7 +19,8 @@
     <title>Base</title>
     {% endblock %}
 </head>
-/*<link rel="stylesheet" type="text/css" media="screen" href="static/home.css" />*/
+/*
+<link rel="stylesheet" type="text/css" media="screen" href="static/home.css" />*/
 
 {% block head %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -27,31 +29,32 @@
 {% block body %}
 <div class="row">
     <div class="col-sm-6">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Equity Chart</h5>
-          <canvas id="myChart"></canvas>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Equity Chart</h5>
+                <canvas id="myChart"></canvas>
+            </div>
         </div>
-      </div>
     </div>
     <div class="col-sm-6">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Asset Chart</h5>
-          <canvas id="assetChart"></canvas>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Asset Chart</h5>
+                <canvas id="assetChart"></canvas>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Line Chart</h5>
-        <div class='data'>
-            <canvas id="lineChart" width="20" height="20"></canvas>
-        </div>        
     </div>
 </div>
-  
+<div class="col d-flex justify-content-center">
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">Line Chart</h5>
+            <div class='data'>
+                <canvas id="lineChart" width="20" height="20"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var ctx = document.getElementById('myChart');
@@ -83,29 +86,29 @@
     });
 </script>
 <script>
-var ctx = document.getElementById('assetChart');
-var myChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green'],
-        datasets: [{
-            data: [12, 19, 3, 5],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)'
-            ],
-            borderWidth: 1
-        }]
-    }
-});
+    var ctx = document.getElementById('assetChart');
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green'],
+            datasets: [{
+                data: [12, 19, 3, 5],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
 </script>
 
 <script>
@@ -121,31 +124,31 @@ var myChart = new Chart(ctx, {
                 labels: ['January', 'February', 'March', 'April', 'May', 'June'],*/
             datasets: [{
                 label: 'Line 1',
-                data:[{x: 10, y:20},{x:15, y:10},{x:12, y:8}, {x:12, y:12}]},
-                {label: 'Line 2',
-                data:[{x:20, y:20},{x:18, y:17},{x: 10, y:20},{x:15, y:10}]}],
+                data: [{ x: 10, y: 20 }, { x: 15, y: 10 }, { x: 12, y: 8 }, { x: 12, y: 12 }]
+            }],
             borderWidth: 10,
             options: {
-                scales:{
-                    yAxes:[{
-                        ticks:{
-                            suggestedMin: 0,
-                            suggestedMax: 30
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            Min: 0,
+                            Max: 30
                         }
                     }]
                 }
             },
             borderColor: ['rgba(255, 99, 132, 0.2)'],
             borderCapStyle: ['round'],
-            backgroundColor: ['rgba(255, 255, 255, 0)']
-            }]
+            backgroundColor: ['rgba(255, 255, 255, 0)'],
+            pointStyle: 'circle',
+            steppedLine: 'true'
         }
     });
 </script>
 <style>
-.data {
-    width: 50%;
-    height: 50%;
-}
+    .data {
+        width: 50%;
+        height: 50%;
+    }
 </style>
 {% endblock %}
