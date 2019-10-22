@@ -1,0 +1,25 @@
+.market-data {
+    column-count: 2;
+    column-gap: 1rem;
+}
+.market-data-bar{
+    background-color: black;
+    padding-left: 0;
+    column-count: 5;
+    font-size: larger;
+}
+.ticker{
+    text-align: right;
+}
+
+.item{
+    flex:20%;
+}
+.h1, h1{
+    font-size: 4rem;
+    text-align: center;
+}
+
+.nav-link{
+    color: whitesmoke;
+}
