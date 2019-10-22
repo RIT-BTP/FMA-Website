@@ -16,6 +16,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="../static/fmalogo.jpg">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" media="screen" href="static/base.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     {% block head %}
     <title>Base</title>
     {% endblock %}
@@ -25,52 +26,74 @@
     <div class="market-data-bar" style="background-color: black">
         <div class="market-data">
             <div class="ticker">
-                <span style="color:white">DOW</span>
+                <span class='data' style="color:white">DOW</span>
             </div>
             <div class="change">
-                <span style="color:green">1.54%</span>
+                <span class='data' style="color:green">1.54%</span>
+            </div>
+        </div>
+        <div class="market-data">
+            <div class="ticker">
+                <span class='data' style="color:white">NASDQ</span>
+            </div>
+            <div class="change">
+                <span class='data' style="color:red">-2.45%</span>
+            </div>
+        </div>
+        <div class="market-data">
+            <div class="ticker">
+                <span class='data' style="color:white">S&P500</span>
+            </div>
+            <div class="change">
+                <span class='data' style="color:green">0.15%</span>
+            </div>
+        </div>
+        <div class="market-data">
+            <div class="ticker">
+                <span class='data' style="color:white">DAX</span>
+            </div>
+            <div class="change">
+                <span class='data' style="color:green">0.72%</span>
+            </div>
+        </div>
+        <div class="market-data">
+            <div class="ticker">
+                <span class='data' style="color:white">SMI</span>
+            </div>
+            <div class="change">
+                <span class='data' style="color:red">-5.62%</span>
             </div>
         </div>
     </div>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#"><img src="../static/fmalogo.jpg" alt="" width="60" height="60"></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+    <div class='header'>
+        <div class="item" style="width: 10%; float:left;">
+            <img src="../static/fmalogo_alpha.png" alt="" width="150rem" height="150rem">
         </div>
+        <div class="item" id="fma-name" style="width: 80%; float:left; padding: 2rem;">
+            <h1>Financial Management Association</h1>
+        </div>
+        <div class="item" id=portfolio style="width: 10%; float:left;">
+            <h5 style="padding-top:1rem; color: black;">Portfolio Value</h5>
+            <div style="background-color: white;">
+                <div id="portfolio-val" style="color: black">
+                    <h5>149,538.49</h5>
+                </div>
+                <div id="portfolio-ch" style="color: green; display: inline-block;">
+                    <div style="display: inline-block;"><i class="material-icons" style="font-size: 2rem">trending_up</i><div style="font-size: 1.5rem;display: inline-block;">+ 0.56%</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg" style="background-color: black; width:100%">
+            <div class="container" style="float: left;">
+                    <a class="nav-link" href="#"><span>Home</span></a>
+                    <a class="nav-link" href="#"><span>About</span></a>
+                    <a class="nav-link" href="#"><span>Portfolio</span></a>
+                    <a class="nav-link" href="#"><span>Log In</span></a>
+            </div>
     </nav>
     {% block body %}
-    <h1>Base</h1>
+    <h1 style="text-align: center">Base</h1>
     {% endblock %}
 </body>
 
