@@ -1,7 +1,9 @@
-from models import Stocks
+# from models import Stocks
 import numpy as np
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+from datetime import datetime
+import pandas as pd
 
 
 def random_color(arange=(0, 256)):
@@ -49,10 +51,58 @@ def construct_data():
 
 
 class bsoption:
-    def __init__(stock):
-        url = f"https://finance.yahoo.com/quote/{stock}"
-        html = urlopen(url)
-        self.soup = BeautifulSoup(html)
+    def __init__(self, stock):
+        self.url = f"https://finance.yahoo.com/quote/{stock}"
+        html = urlopen(self.url)
+        self.soup = BeautifulSoup(html, features="html5lib")
+
+    def i_scrap(self):
+        price_soup = (
+            self.soup.find(id="quote-header-info").contents[2].contents[0].contents
+        )
+        self.cur_price = price_soup[0].text
+        self.d_chng = price_soup[1].contents[0].text
+        quote_soup = self.soup.find(id="quote-summary").contents
+        self.dividend = (
+            quote_soup[1].contents[0].contents[0].contents[5].contents[1].text
+        )
+        self.eps = quote_soup[1].contents[0].contents[0].contents[3].contents[1].text
+        self.pe = quote_soup[1].contents[0].contents[0].contents[2].contents[1].text
+        self.close = quote_soup[0].contents[0].contents[0].contents[0].contents[1].text
+        self.open = quote_soup[0].contents[0].contents[0].contents[1].contents[1].text
+
+    def profile_scrap(self):
+        html = urlopen(self.url + "/profile")
+        profile_soup = BeautifulSoup(html, features="html5lib")
+        pass
+
+    def history(self, start, end=None):
+        if not end:
+            end = datetime.now()
+        html = urlopen(self.url + f"/history?period1={int(datetime.timestamp(start))}&period2={int(datetime.timestamp(end))}&interval=1d&filter=history&frequency=1d")
+        print(self.url + f"/history?period1={int(datetime.timestamp(start))}&period2={int(datetime.timestamp(end))}&interval=1d&filter=history&frequency=1d")
+        soup = BeautifulSoup(html, features="html5lib")
+        main = soup.find(id="Col1-3-HistoricalDataTable-Proxy")
+        head = main.contents[0].contents[1].contents[0].contents[0].contents[0].contents
+        body = main.contents[0].contents[1].contents[0].contents[1]
+        data = {h.text:[] for h in head}
+        for row in body:
+            if len(row.contents) != 2:
+                for i, d in enumerate(row.contents):
+                    data[list(data.keys())[i]].append(d.text)
+        df = pd.DataFrame(data)
+        print(df)
+
+    def __repr__(self):
+        return "Current Price: {},\nDaily Change: {},\nDividend: {},\nEPS {},\nPE Ratio: {},\nClosed: {},\nOpen: {}".format(
+            self.cur_price,
+            self.d_chng,
+            self.dividend,
+            self.eps,
+            self.pe,
+            self.close,
+            self.open,
+        )
 
 
 class apioption:
@@ -61,4 +111,7 @@ class apioption:
 
 
 if __name__ == "__main__":
-    bs = bsoption("AAPL")
+    bs = bsoption("aapl")
+    bs.history(datetime(2018,1,1))
+    # bs.i_scrap()
+    # print(bs)
