@@ -1,0 +1,17 @@
+.data {
+    width: 50%;
+    height: 50%;
+}
+
+.col1,.col2
+{
+	float: left;
+	margin-left: 3%;
+}
+
+.col1 { width: 48%; }
+.col2 { width: 48%; }
+
+.card{
+    padding: 2rem;
+}
