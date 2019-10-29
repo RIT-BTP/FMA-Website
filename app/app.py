@@ -7,7 +7,8 @@ import datetime
 app = Flask(__name__)
 
 # FOR DEV ONLY
-app.config["APP_SETTINGS"] = "config.DevelopmentConfig"
+os.environ["APP_SETTINGS"] = "config.DevelopmentConfig"
+
 
 app.config.from_object(os.environ["APP_SETTINGS"])
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

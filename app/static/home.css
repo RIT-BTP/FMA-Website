@@ -11,3 +11,7 @@
 
 .col1 { width: 48%; }
 .col2 { width: 48%; }
+
+.card{
+    padding: 2rem;
+}
