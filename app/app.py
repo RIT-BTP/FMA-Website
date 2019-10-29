@@ -74,3 +74,12 @@ def delete_stocks():
         db.session.commit()
         return redirect(url_for("home"))
     return render_template("delete_stocks.html", form=form)
+
+
+@app.route("/portfolio")
+def portfolio():
+    return render_template("portfolio.html")
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
