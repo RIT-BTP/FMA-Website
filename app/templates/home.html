@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block body %}
-<div class="row">
+<div class="row" style="margin:2rem;">
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
@@ -28,31 +28,15 @@
     <div class="col d-flex justify-content-center">
         <div class="card text-center" style="width: 90%;">
             <div class="card-body">
-                <h5 class="card-title">Line Chart</h5>
+                <h5 class="card-title">Year to Date</h5>
                 <div class='data'>
-                    <canvas id="lineChart"></canvas>
+                    <canvas id="linechartdf"></canvas>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="card text-center" style="width: 60rem;">
-    <div class="card-body">
-        <h5 class="card-title">Year to Date</h5>
-        <div class='data'>
-            <canvas id="line-chart" width="800" height="450"></canvas>
-        </div>
-    </div>
-</div>
-<div class="card text-center" style="width: 60rem;">
-    <div class="card-body">
-        <h5 class="card-title">Year to Date</h5>
-        <div class='data'>
-            <canvas id="linechartdf" width="75%"></canvas>
-        </div>
-    </div>
-</div>
 
 <script>
     var ctx = document.getElementById('myChart');
@@ -109,82 +93,6 @@
     });
 </script>
 
-<script>
-    var ctx = document.getElementById('lineChart');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            label: ['Line Chart'],
-            xAxisID: ['x Axis'],
-            yAxisID: ['y Axis'],
-            datasets: [{
-                label: 'Line 1',
-                data: [{ x: 10, y: 20 }, { x: 15, y: 10 }, { x: 12, y: 8 }, { x: 12, y: 12 }]
-            }],
-            borderWidth: 10,
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            Min: 0,
-                            Max: 30
-                        }
-                    }]
-                }
-            },
-            borderColor: ['rgba(255, 99, 132, 0.2)'],
-            borderCapStyle: ['round'],
-            backgroundColor: ['rgba(255, 255, 255, 0)'],
-            pointStyle: 'circle',
-            steppedLine: 'true'
-        }
-    });
-</script>
-
-<script>
-    new Chart(document.getElementById("line-chart"), {
-        type: 'line',
-        data: {
-            labels: [1500, 1600, 1700, 1750, 1800, 1850, 1900, 1950, 1999, 2050],
-            datasets: [{
-                data: [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478],
-                label: "S&P 500",
-                borderColor: "#3e95cd",
-                fill: false
-            }, {
-                data: [168, 170, 178, 190, 203, 276, 408, 547, 675, 734],
-                label: "Europe",
-                borderColor: "#3cba9f",
-                fill: false
-            }, {
-                data: [40, 20, 10, 16, 24, 38, 74, 167, 508, 784],
-                label: "Latin America",
-                borderColor: "#e8c3b9",
-                fill: false
-            }, {
-                data: [6, 3, 2, 2, 7, 26, 82, 172, 312, 433],
-                label: "North America",
-                borderColor: "#c45850",
-                fill: true
-            }
-            ]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'World population per region (in millions)'
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: 3000
-                    }
-                }]
-            }
-        }
-    });
-</script>
 <script>
     new Chart(document.getElementById("linechartdf"), {
         type: 'line',
