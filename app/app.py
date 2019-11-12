@@ -14,8 +14,8 @@ app.config.from_object(os.environ["APP_SETTINGS"])
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
-from models import Stocks
-from forms import StockEntryForm, StockUpdateForm, StockDeleteForm
+from models import Stocks, Leadership
+from forms import StockEntryForm, StockUpdateForm, StockDeleteForm, AddLeadershipForm
 
 # from functions import user_check
 
@@ -82,4 +82,14 @@ def portfolio():
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    leaders = Leadership.get(active=True)
+    return render_template("about.html", leaders=leaders)
+
+@app.route('/add-leaders', methods=["GET", "POST"])
+def add_leaders():
+    form = AddLeadershipForm(request.form)
+
+    if request.method == "POST" and form.validate():
+        Leadership.insert(name=form.name.data, icon=base64.b64encode(request.files[form.icon.name].read()), position=form.position.data, description=form.description.data, major=form.major.data, year=form.year.data)
+        return redirect(url_for("about"))
+    return render_template('add-leadership.html', form=form)    

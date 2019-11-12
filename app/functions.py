@@ -4,6 +4,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from datetime import datetime
 import pandas as pd
+import pandas_datareader as pdr
 
 
 def random_color(arange=(0, 256)):
@@ -76,6 +77,10 @@ class bsoption:
         profile_soup = BeautifulSoup(html, features="html5lib")
         pass
 
+    def test(self):
+        df = pdr.get_data_yahoo("aapl", datetime(2018,1,1), datetime.now())
+        print(df)
+
     def history(self, start, end=None):
         if not end:
             end = datetime.now()
@@ -112,6 +117,7 @@ class apioption:
 
 if __name__ == "__main__":
     bs = bsoption("aapl")
-    bs.history(datetime(2018,1,1))
+    bs.test()
+    # bs.history(datetime(2018,1,1))
     # bs.i_scrap()
     # print(bs)

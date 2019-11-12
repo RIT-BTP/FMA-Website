@@ -6,5 +6,40 @@
 {% endblock %}
 
 {% block body %}
-
+<br>
+<div class="container">
+    <h2>About Us</h2>
+    <div class="container">
+        <p>
+                The RIT Financial Management Association is a Saunders College of Business club dedicated to the advancement of student-centric investing. FMA manages a $200,000+ Stock and ETF investment portfolio. FMA Meetings are weekly on Wednesday's from 5-6PM in the Sklarsky Business Analytics Lab (LOW-1125). Each week we discuss our portfolio standings, have stock pitches for both buying and selling, and have club discussion regarding news events. We also have several company visits/Guest speakers visit each semester from companies such as Vanguard, Northwestern Mutual, and the SEC. We also participate in the Adirondack Cup Small Cap Investment challenger every year. FMA is an open club for all RIT students, we have members from 5 of the 9 individual colleges at RIT. More information including our club constituiotn can be found here:
+        </p>
+    </div>
+    <h2>Who We Are</h2>
+    <div class="container">
+            {% for leader in leaders %}
+            <div class="card">
+                    <div class="row no-gutters">
+                        <div class="col-auto">
+                            <img src="data:image/png;base64, {{leader.icon.decode('utf-8')}}" class="img"
+                                style="border-top-left-radius: 0.2rem; width:10rem; height:10rem;" alt="">
+                        </div>
+                        <div class="col">
+                            <div class="card-block px-2">
+                                <h4 class="card-title">{{leader.name}}</h4>
+                                <p class="card-text">{{leader.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer w-100 text-muted">
+                        Position: {{leader.position}}
+                        <br>
+                        Major: {{leader.major}}
+                        <br>
+                        Year: {{leader.year}}
+                    </div>
+                </div>
+                <br>
+                {% endfor %}
+    </div>
+</div>
 {% endblock %}
