@@ -41,16 +41,21 @@ class Leadership(db.Model):
     icon = db.Column(db.LargeBinary)
     description = db.Column(db.String(500))
     position = db.Column(db.String(50))
+    major = db.Column(db.String(50))
+    year = db.Column(db.Integer)
     active = db.Column(BOOLEAN())
 
-    def __init__(self, name, icon, description, active):
+    def __init__(self, name, icon, description, position, major, year):
         self.name = name
         self.icon = icon
         self.description = description
-        self.active = active
+        self.active = True
+        self.position = position
+        self.major = major
+        self.year = year
 
     def __repr__(self):
-        return "<id {}, name {}>".format(self.id, self.name)
+        return "<id {}, name {}>".format(self.icon, self.name)
 
     @classmethod
     def get(cls, **kwargs):

@@ -33,3 +33,12 @@ class StockUpdateForm(Form):
 
 class StockDeleteForm(Form):
     id = IntegerField("Stock ID", [validators.DataRequired()])
+
+
+class AddLeadershipForm(Form):
+    icon = FileField('Icon')
+    name = StringField("Name", [validators.Length(min=4, max=25), validators.DataRequired()])
+    description = TextAreaField("Short Description", [validators.Length(min=10, max=500), validators.DataRequired()])
+    position = StringField("Position", [validators.DataRequired()])
+    major = StringField("Major", [validators.DataRequired()])
+    year = IntegerField("Year")
