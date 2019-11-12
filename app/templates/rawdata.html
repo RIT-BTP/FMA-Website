@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<title>Porfolio Raw Data</title>
+{% endblock %}
+
+{% block body %}
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover table-sm" style="margin:2rem;">
+        <thead class="thead-dark">
+            <tr>
+                <th scope=”col”>SECTOR</th>
+                <th scope=”col”>TICKER</th>
+                <th scope=”col”># SHARES</th>
+                <th scope="col">COST PRICE</th>
+                <th scope="col">TOTAL COST</th>
+                <th scope="col">% COST</th>
+                <th scope="col">CURR PRICE</th>
+                <th scope="col">MKT. VALUE</th>
+                <th scope="col">WEIGHT</th>
+                <th scope="col">$ GAIN</th>
+                <th scope="col">TOTAL $ GAIN</th>
+                <th scope="col">% GAIN</th>
+                <th scope="col">ANN. DIV</th>
+                <th scope="col">CURR. YIELD</th>
+                <th scope="col">YIELD ON COST</th>
+                <th scope="col">ANN. INCOME</th>
+                <th scope="col">PRICE CHANGE</th>
+                <th scope="col">INDEX</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">Example</th>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <th scope="row">Example 2</th>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                    <th scope="row">Example 3</th>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                </tr>
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

@@ -80,6 +80,10 @@ def delete_stocks():
 def portfolio():
     return render_template("portfolio.html")
 
+@app.route("/rawdata")
+def rawdata():
+    return render_template("rawdata.html")
+
 @app.route("/about")
 def about():
     return render_template("about.html")
