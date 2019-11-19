@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect, render_template, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_socketio import SocketIO, emit
 import os
 import base64
 import datetime
@@ -16,8 +17,7 @@ db = SQLAlchemy(app)
 
 from models import Stocks, Leadership
 from forms import StockEntryForm, StockUpdateForm, StockDeleteForm, AddLeadershipForm
-
-# from functions import user_check
+from functions import StockThread, socketio, thread
 
 
 @app.route("/")
@@ -97,3 +97,17 @@ def add_leaders():
         Leadership.insert(name=form.name.data, icon=base64.b64encode(request.files[form.icon.name].read()), position=form.position.data, description=form.description.data, major=form.major.data, year=form.year.data)
         return redirect(url_for("about"))
     return render_template('add-leadership.html', form=form)    
+
+@socketio.on('connect', namespace='/stock-api')
+def test_connect():
+    global thread
+    print('Client connected')
+
+    if not thread.isAlive():
+        print("Starting Thread")
+        thread = StockThread()
+        thread.start()
+
+@socketio.on('disconnect', namespace='/stock-api')
+def test_disconnect():
+    print('Client disconnected')
