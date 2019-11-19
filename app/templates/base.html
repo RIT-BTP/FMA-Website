@@ -14,6 +14,9 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="shortcut icon" type="image/x-icon" href="../static/fmalogo.jpg">
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="static/application.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" media="screen" href="static/base.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -29,7 +32,7 @@
                 <span class='data' style="color:white">DOW</span>
             </div>
             <div class="change">
-                <span class='data' style="color:green">1.54%</span>
+                <span class='data' id="dow-chng" style="color:green">---</span>
             </div>
         </div>
         <div class="market-data">
@@ -37,7 +40,7 @@
                 <span class='data' style="color:white">NASDQ</span>
             </div>
             <div class="change">
-                <span class='data' style="color:red">-2.45%</span>
+                <span class='data' id="nas-chng" style="color:red">---</span>
             </div>
         </div>
         <div class="market-data">
@@ -45,7 +48,7 @@
                 <span class='data' style="color:white">S&P500</span>
             </div>
             <div class="change">
-                <span class='data' style="color:green">0.15%</span>
+                <span class='data' id="sp-chng" style="color:green">---</span>
             </div>
         </div>
         <div class="market-data">
