@@ -14,6 +14,7 @@ thread = Thread()
 thread_stop_event = Event()
 socketio = SocketIO(app)
 
+
 class StockThread(Thread):
     def __init__(self):
         self.delay = 5
@@ -26,7 +27,11 @@ class StockThread(Thread):
         """
         stock = bsoption()
         while not thread_stop_event.isSet():
-            socketio.emit('newprice', {'SP500':stock.sp500,'DOW':stock.dow,"NASDAQ":stock.nasdaq}, namespace="/stock-api")
+            socketio.emit(
+                "newprice",
+                {"SP500": stock.sp500, "DOW": stock.dow, "NASDAQ": stock.nasdaq},
+                namespace="/stock-api",
+            )
             sleep(self.delay)
 
     def run(self):
@@ -110,24 +115,51 @@ class bsoption:
         pass
 
     def index_scrap(self):
-        self.sp500 = self.soup.find(id="market-summary").contents[0].contents[0].contents[0].contents[4].text
-        self.dow = self.soup.find(id="market-summary").contents[0].contents[1].contents[0].contents[4].text
-        self.nasdaq = self.soup.find(id="market-summary").contents[0].contents[2].contents[0].contents[4].text
+        self.sp500 = (
+            self.soup.find(id="market-summary")
+            .contents[0]
+            .contents[0]
+            .contents[0]
+            .contents[4]
+            .text
+        )
+        self.dow = (
+            self.soup.find(id="market-summary")
+            .contents[0]
+            .contents[1]
+            .contents[0]
+            .contents[4]
+            .text
+        )
+        self.nasdaq = (
+            self.soup.find(id="market-summary")
+            .contents[0]
+            .contents[2]
+            .contents[0]
+            .contents[4]
+            .text
+        )
 
     def test(self):
-        df = pdr.get_data_yahoo("aapl", datetime(2018,1,1), datetime.now())
+        df = pdr.get_data_yahoo("aapl", datetime(2018, 1, 1), datetime.now())
         print(df)
 
     def history(self, start, end=None):
         if not end:
             end = datetime.now()
-        html = urlopen(self.url + f"/history?period1={int(datetime.timestamp(start))}&period2={int(datetime.timestamp(end))}&interval=1d&filter=history&frequency=1d")
-        print(self.url + f"/history?period1={int(datetime.timestamp(start))}&period2={int(datetime.timestamp(end))}&interval=1d&filter=history&frequency=1d")
+        html = urlopen(
+            self.url
+            + f"/history?period1={int(datetime.timestamp(start))}&period2={int(datetime.timestamp(end))}&interval=1d&filter=history&frequency=1d"
+        )
+        print(
+            self.url
+            + f"/history?period1={int(datetime.timestamp(start))}&period2={int(datetime.timestamp(end))}&interval=1d&filter=history&frequency=1d"
+        )
         soup = BeautifulSoup(html, features="html5lib")
         main = soup.find(id="Col1-3-HistoricalDataTable-Proxy")
         head = main.contents[0].contents[1].contents[0].contents[0].contents[0].contents
         body = main.contents[0].contents[1].contents[0].contents[1]
-        data = {h.text:[] for h in head}
+        data = {h.text: [] for h in head}
         for row in body:
             if len(row.contents) != 2:
                 for i, d in enumerate(row.contents):

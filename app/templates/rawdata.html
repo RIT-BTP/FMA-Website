@@ -31,24 +31,16 @@
             </tr>
         </thead>
         <tbody>
+            {% for stock in stocks %}
             <tr>
-                <th scope="row">Example</th>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
+                <th scope="row">{{ stock.sector }}</th>
+                <td>{{ stock.name }}</td>
+                <td>{{ stock.quantity }}</td>
+                <td>{{ stock.cost }}</td>
             </tr>
-            <tr>
-                <th scope="row">Example 2</th>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <th scope="row">Example 3</th>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-            </tr>
+
+            {% endfor %}
+
         </tbody>
     </table>
 </div>

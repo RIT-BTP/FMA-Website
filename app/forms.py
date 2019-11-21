@@ -9,6 +9,7 @@ from wtforms import (
     IntegerField,
     DecimalField,
 )
+from fields import MultiCheckboxField
 from wtforms.fields.html5 import DateField
 
 
@@ -18,8 +19,8 @@ class StockEntryForm(Form):
     )
     quantity = IntegerField("Quantity", [validators.DataRequired()])
     cost = DecimalField("Cost", [validators.DataRequired()])
-    index = StringField("Financial Index", [validators.length(min=2, max=20)])
-    sector = StringField("Financial Sector", [validators.length(min=1, max=20)])
+    index = StringField("Financial Index")
+    sector = StringField("Financial Sector")
 
 
 class StockUpdateForm(Form):
@@ -36,9 +37,17 @@ class StockDeleteForm(Form):
 
 
 class AddLeadershipForm(Form):
-    icon = FileField('Icon')
-    name = StringField("Name", [validators.Length(min=4, max=25), validators.DataRequired()])
-    description = TextAreaField("Short Description", [validators.Length(min=10, max=500), validators.DataRequired()])
+    icon = FileField("Icon")
+    name = StringField(
+        "Name", [validators.Length(min=4, max=25), validators.DataRequired()]
+    )
+    description = TextAreaField(
+        "Short Description",
+        [validators.Length(min=10, max=500), validators.DataRequired()],
+    )
     position = StringField("Position", [validators.DataRequired()])
     major = StringField("Major", [validators.DataRequired()])
     year = IntegerField("Year")
+
+class ManageLeadershipForm(Form):
+    active = MultiCheckboxField()
