@@ -83,7 +83,8 @@ def portfolio():
 
 @app.route("/rawdata")
 def rawdata():
-    return render_template("rawdata.html")
+    stocks = Stocks.get()
+    return render_template("rawdata.html", stocks=stocks)
 
 
 @app.route("/about")
