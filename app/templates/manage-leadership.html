@@ -1,0 +1,20 @@
+{% from "_formhelpers.html" import render_field %}
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" media="screen" href="static/manage-leadership.css" />
+{% endblock %}
+
+{% block body %}
+
+<br>
+<form method=post class="content container" enctype="multipart/form-data">
+    
+    <dl>
+        {{ render_field(form.active) }}
+    </dl>
+    <input type=submit value="Add Leader" class="button">
+
+</form>
+
+{% endblock %}

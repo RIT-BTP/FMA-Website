@@ -16,7 +16,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 from models import Stocks, Leadership
-from forms import StockEntryForm, StockUpdateForm, StockDeleteForm, AddLeadershipForm
+from forms import StockEntryForm, StockUpdateForm, StockDeleteForm, AddLeadershipForm, ManageLeadershipForm
 from functions import StockThread, socketio, thread
 
 
@@ -80,34 +80,72 @@ def delete_stocks():
 def portfolio():
     return render_template("portfolio.html")
 
+
 @app.route("/rawdata")
 def rawdata():
     return render_template("rawdata.html")
+
 
 @app.route("/about")
 def about():
     leaders = Leadership.get(active=True)
     return render_template("about.html", leaders=leaders)
 
-@app.route('/add-leaders', methods=["GET", "POST"])
+
+@app.route("/manage-leaders", methods=['GET','POST'])
+def manage_leaders():
+    leaders = Leadership.get()
+    mychoices = [(leader.id,leader.name)for leader in leaders]
+    prechecked = [leader.id for leader in leaders if leader.active]
+    print(prechecked)
+    print(mychoices)
+    form = ManageLeadershipForm(request.form)
+    form.active.choices = mychoices
+    form.active.coerce = str
+    if request.method == "GET":
+        form.active.process_data(prechecked)
+
+    if request.method == "POST":
+        active = [int(i) for i in form.active.data]
+        for leader in leaders:
+            if leader.id in active:
+                leader.active = True
+            else:
+                leader.active = False
+        db.session.commit()
+        return redirect(url_for("about"))
+    
+    return render_template("manage-leadership.html", form=form)
+
+
+@app.route("/add-leaders", methods=["GET", "POST"])
 def add_leaders():
     form = AddLeadershipForm(request.form)
 
     if request.method == "POST" and form.validate():
-        Leadership.insert(name=form.name.data, icon=base64.b64encode(request.files[form.icon.name].read()), position=form.position.data, description=form.description.data, major=form.major.data, year=form.year.data)
+        Leadership.insert(
+            name=form.name.data,
+            icon=base64.b64encode(request.files[form.icon.name].read()),
+            position=form.position.data,
+            description=form.description.data,
+            major=form.major.data,
+            year=form.year.data,
+        )
         return redirect(url_for("about"))
-    return render_template('add-leadership.html', form=form)    
+    return render_template("add-leadership.html", form=form)
 
-@socketio.on('connect', namespace='/stock-api')
+
+@socketio.on("connect", namespace="/stock-api")
 def test_connect():
     global thread
-    print('Client connected')
+    print("Client connected")
 
     if not thread.isAlive():
         print("Starting Thread")
         thread = StockThread()
         thread.start()
 
-@socketio.on('disconnect', namespace='/stock-api')
+
+@socketio.on("disconnect", namespace="/stock-api")
 def test_disconnect():
-    print('Client disconnected')
+    print("Client disconnected")

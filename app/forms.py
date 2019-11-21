@@ -9,6 +9,7 @@ from wtforms import (
     IntegerField,
     DecimalField,
 )
+from fields import MultiCheckboxField
 from wtforms.fields.html5 import DateField
 
 
@@ -36,9 +37,17 @@ class StockDeleteForm(Form):
 
 
 class AddLeadershipForm(Form):
-    icon = FileField('Icon')
-    name = StringField("Name", [validators.Length(min=4, max=25), validators.DataRequired()])
-    description = TextAreaField("Short Description", [validators.Length(min=10, max=500), validators.DataRequired()])
+    icon = FileField("Icon")
+    name = StringField(
+        "Name", [validators.Length(min=4, max=25), validators.DataRequired()]
+    )
+    description = TextAreaField(
+        "Short Description",
+        [validators.Length(min=10, max=500), validators.DataRequired()],
+    )
     position = StringField("Position", [validators.DataRequired()])
     major = StringField("Major", [validators.DataRequired()])
     year = IntegerField("Year")
+
+class ManageLeadershipForm(Form):
+    active = MultiCheckboxField()

@@ -54,8 +54,8 @@ class Leadership(db.Model):
         self.major = major
         self.year = year
 
-    def __repr__(self):
-        return "<id {}, name {}>".format(self.icon, self.name)
+    # def __repr__(self):
+    #     return "<id {}, name {}>".format(self.id, self.name)
 
     @classmethod
     def get(cls, **kwargs):
@@ -66,4 +66,3 @@ class Leadership(db.Model):
         obj = cls(**kwargs)
         db.session.add(obj)
         db.session.commit()
-
