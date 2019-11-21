@@ -41,7 +41,7 @@ def new_stocks():
             index=form.index.data,
             sector=form.sector.data,
         )
-        return redirect(url_for("home"))
+        return redirect(url_for("new_stocks"))
     return render_template("new_stocks.html", form=form)
 
 
