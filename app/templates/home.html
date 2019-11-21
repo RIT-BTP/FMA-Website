@@ -29,7 +29,7 @@
         <div class="card text-center">
             <div class="card-body">
                 <h5 class="card-title">Year to Date</h5>
-                <div class='data'>
+                <div class='data' style="margin:auto">
                     <canvas id="linechartdf" width="300" height="150"></canvas>
                 </div>
             </div>
@@ -72,20 +72,22 @@
     var myChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green'],
+            labels: ['Equity', 'REIT', 'Fixed Income', 'Cash', 'Gold'],
             datasets: [{
-                data: [12, 19, 3, 5],
+                data: [12, 19, 3, 5,9],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)'
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)'
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 159, 64, 1)'
                 ],
                 borderWidth: 1
             }]
@@ -105,27 +107,13 @@
                 fill: false
             }, {
                 data: [168, 170, 178, 190, 203, 276, 408, 547, 675, 734],
-                label: "Europe",
+                label: "FMA Portfolio",
                 borderColor: "#3cba9f",
                 fill: false
-            }, {
-                data: [40, 20, 10, 16, 24, 38, 74, 167, 508, 784],
-                label: "Latin America",
-                borderColor: "#e8c3b9",
-                fill: false
-            }, {
-                data: [6, 3, 2, 2, 7, 26, 82, 172, 312, 433],
-                label: "North America",
-                borderColor: "#c45850",
-                fill: true
             }
             ]
         },
         options: {
-            title: {
-                display: true,
-                text: 'World population per region (in millions)'
-            },
             scales: {
                 yAxes: [{
                     ticks: {
