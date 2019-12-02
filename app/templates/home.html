@@ -28,7 +28,7 @@
     <div class="col justify-content-center">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title">Year to Date</h5>
+                <h5 class="card-title">Year to Date Comparison</h5>
                 <div class='data' style="margin:auto">
                     <canvas id="linechartdf" width="300" height="150"></canvas>
                 </div>
@@ -39,11 +39,14 @@
 
 
 <script>
+    {% for stock in stocks %}
+    labels:[{{stock.sector}}]
+    {% endfor %}
     var ctx = document.getElementById('myChart');
     var myChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            labels: ['Technology','Defense','Healthcare','Financials','Consumer Goods','Automotive','Service','Energy','Precious Metals'],
             datasets: [{
                 data: [12, 19, 3, 5, 2, 3],
                 backgroundColor: [
