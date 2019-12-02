@@ -29,3 +29,12 @@
 //     });
 
 // });
+$(function() {
+    $('a#refresh').bind('click', function() {
+      $.getJSON('/background_refresh',
+          function(data) {
+        //do nothing
+      });
+      return false;
+    });
+  });

@@ -52,3 +52,8 @@ class AddLeadershipForm(Form):
 
 class ManageLeadershipForm(Form):
     active = MultiCheckboxField()
+
+class LoginForm(Form):
+    username = StringField('Username')
+    password = PasswordField("Password")
+    remember_me = BooleanField('Remember Me')

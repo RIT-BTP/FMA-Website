@@ -16,6 +16,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="../static/fmalogo.jpg">
     <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="static/application.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" media="screen" href="static/base.css" />
@@ -51,22 +52,6 @@
                 <span class='data' id="sp-chng" style="color:green">---</span>
             </div>
         </div>
-        <div class="market-data">
-            <div class="ticker">
-                <span class='data' style="color:white">DAX</span>
-            </div>
-            <div class="change">
-                <span class='data' style="color:green">0.72%</span>
-            </div>
-        </div>
-        <div class="market-data">
-            <div class="ticker">
-                <span class='data' style="color:white">SMI</span>
-            </div>
-            <div class="change">
-                <span class='data' style="color:red">-5.62%</span>
-            </div>
-        </div>
     </div>
     <div class='header'>
         <div class="item" style="width: 10%; float:left;">
@@ -79,10 +64,14 @@
             <h5 style="padding-top:1rem; color: black;">Portfolio Value</h5>
             <div style="background-color: white;">
                 <div id="portfolio-val" style="color: black">
-                    <h5>149,538.49</h5>
+                    <h5>{{current[0]}}</h5>
                 </div>
-                <div id="portfolio-ch" style="color: green; display: inline-block;">
-                    <div style="display: inline-block;"><i class="material-icons" style="font-size: 2rem">trending_up</i><div style="font-size: 1.5rem;display: inline-block;">+ 0.56%</div></div>
+                <div id="portfolio-ch" style="display: inline-block;">
+                    {% if current[1] > 0 %}
+                    <div style="color: green;display: inline-block;"><i class="material-icons" style="font-size: 2rem">trending_up</i><div style="font-size: 1.5rem;display: inline-block;">{{current[1]}}%</div></div>
+                    {% else %}
+                    <div style="color: red;display: inline-block;"><i class="material-icons" style="font-size: 2rem">trending_down</i><div style="font-size: 1.5rem;display: inline-block;">{{current[1]}}%</div></div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -92,7 +81,12 @@
                     <a class="nav-link" href="{{url_for('home')}}"><span>Home</span></a>
                     <a class="nav-link" href="{{url_for('about')}}"><span>About</span></a>
                     <a class="nav-link" href="{{url_for('portfolio')}}"><span>Portfolio</span></a>
-                    <a class="nav-link" href="#"><span>Log In</span></a>
+                    {% if current_user.is_anonymous %}
+                    <a class="nav-link" href="{{url_for('login')}}"><span>Log In</span></a>
+                    {% else %}
+                    <a class="nav-link" href="{{url_for('logout')}}"><span>Log Out</span></a>
+                    {% endif %}
+                    <a class="nav-link" href="#" id="refresh"><span><i class="material-icons" style="font-size: 2rem">update</i></span></a>
             </div>
     </nav>
     {% block body %}

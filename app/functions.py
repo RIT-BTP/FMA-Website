@@ -1,9 +1,9 @@
-from models import CurStockData
+from models import CurStockData, Stocks, History
 from app import db
 import numpy as np
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, date, timedelta
 import pandas as pd
 import pandas_datareader as pdr
 from threading import Thread, Event
@@ -18,7 +18,7 @@ socketio = SocketIO(app)
 
 class StockThread(Thread):
     def __init__(self):
-        self.delay = 5
+        self.delay = 10
         super(StockThread, self).__init__()
 
     def randomNumberGenerator(self):
@@ -46,7 +46,6 @@ def random_color(arange=(0, 256)):
 
 def refresh_stock_data(stocks):
     for stock in stocks:
-        print(stock)
         stock_name = stock.name
         exist = CurStockData.get(name=stock_name)
         data = bsoption(stock_name)
@@ -72,6 +71,31 @@ def refresh_stock_data(stocks):
                 d_open=data.open,
                 d_close=data.close,
             )
+
+
+def cur_state():
+    stocks = Stocks.get()
+    past_total = History.get(date=date.today()-timedelta(days=1))[0]
+    if not past_total:
+        record_history()
+        past_total = History.get(date=date.today()-timedelta(days=1))[0]
+    total = 0
+    for stock in stocks:
+        data = CurStockData.get(name=stock.name)[0]
+        total += stock.quantity*data.cost
+    return (total, round(((total/past_total.total)-1)*100),2)
+
+
+def record_history():
+    total = 0
+    stocks = Stocks.get()
+    refresh_stock_data(stocks)
+    for stock in stocks:
+        data = CurStockData.get(name=stock.name)[0]
+        total += stock.quantity*data.d_close
+    History.insert(total=total, date=date.today()-timedelta(days=1))
+
+
 
 
 def construct_data():
@@ -137,7 +161,6 @@ class bsoption:
         )
         quote_soup = self.soup.find(id="quote-summary").contents
         if "." in quote_soup[1].contents[0].contents[0].contents[5].contents[1].text:
-            print(quote_soup[1].contents[0].contents[0].contents[5].contents[1].text)
             self.dividend = float(
                 quote_soup[1]
                 .contents[0]

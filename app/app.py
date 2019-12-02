@@ -1,11 +1,17 @@
 from flask import Flask, request, redirect, render_template, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO, emit
+import flask_login
+from flask_login import current_user, login_user, login_required, LoginManager
 import os
 import base64
 import datetime
 
 app = Flask(__name__)
+login_manager = flask_login.LoginManager()
+
+login_manager.init_app(app)
+login = LoginManager(app)
 
 # FOR DEV ONLY
 os.environ["APP_SETTINGS"] = "config.DevelopmentConfig"
@@ -15,16 +21,22 @@ app.config.from_object(os.environ["APP_SETTINGS"])
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
-from models import Stocks, Leadership, CurStockData
+from models import Stocks, Leadership, CurStockData, User
 from forms import (
     StockEntryForm,
     StockUpdateForm,
     StockDeleteForm,
     AddLeadershipForm,
     ManageLeadershipForm,
+    LoginForm
 )
-from functions import StockThread, socketio, thread, refresh_stock_data
+from functions import StockThread, socketio, thread, refresh_stock_data, cur_state
+current = cur_state()
 
+@app.context_processor
+def inject_current():
+    global current
+    return dict(current=current)
 
 @app.route("/")
 def root():
@@ -33,10 +45,13 @@ def root():
 
 @app.route("/home")
 def home():
+    global current
+    current = cur_state()
     return render_template("home.html")
 
 
 @app.route("/new stocks", methods=["GET", "POST"])
+@login_required
 def new_stocks():
     form = StockEntryForm(request.form)
     if request.method == "POST" and form.validate():
@@ -52,6 +67,7 @@ def new_stocks():
 
 
 @app.route("/update stocks", methods=["GET", "POST"])
+@login_required
 def update_stocks():
     form = StockUpdateForm(request.form)
     if request.method == "POST" and form.validate():
@@ -72,6 +88,7 @@ def update_stocks():
 
 
 @app.route("/delete stocks", methods=["GET", "POST"])
+@login_required
 def delete_stocks():
     form = StockDeleteForm(request.form)
     if request.method == "POST" and form.validate():
@@ -84,6 +101,8 @@ def delete_stocks():
 
 @app.route("/portfolio")
 def portfolio():
+    global current
+    current = cur_state()
     return render_template("portfolio.html")
 
 
@@ -136,6 +155,7 @@ def about():
 
 
 @app.route("/manage-leaders", methods=["GET", "POST"])
+@login_required
 def manage_leaders():
     leaders = Leadership.get()
     mychoices = [(leader.id, leader.name) for leader in leaders]
@@ -162,6 +182,7 @@ def manage_leaders():
 
 
 @app.route("/add-leaders", methods=["GET", "POST"])
+@login_required
 def add_leaders():
     form = AddLeadershipForm(request.form)
 
@@ -192,3 +213,30 @@ def test_connect():
 @socketio.on("disconnect", namespace="/stock-api")
 def test_disconnect():
     print("Client disconnected")
+
+@app.route('/background_refresh')
+def background_process_test():
+    stocks = Stocks.get()
+    refresh_stock_data(set(stocks))
+    global current
+    current = cur_state()
+    return "nothing"
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = LoginForm(request.form)
+    if request.method == "POST" and form.validate():
+        user = User.get(username=form.username.data)
+        if not user or not user[0].check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        login_user(user[0], remember=form.remember_me.data)
+        return redirect(url_for('home'))
+    return render_template('login.html', title='Sign In', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
