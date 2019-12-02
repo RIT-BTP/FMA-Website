@@ -49,5 +49,6 @@ class AddLeadershipForm(Form):
     major = StringField("Major", [validators.DataRequired()])
     year = IntegerField("Year")
 
+
 class ManageLeadershipForm(Form):
     active = MultiCheckboxField()

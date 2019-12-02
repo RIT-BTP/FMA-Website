@@ -15,9 +15,15 @@ app.config.from_object(os.environ["APP_SETTINGS"])
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
-from models import Stocks, Leadership
-from forms import StockEntryForm, StockUpdateForm, StockDeleteForm, AddLeadershipForm, ManageLeadershipForm
-from functions import StockThread, socketio, thread
+from models import Stocks, Leadership, CurStockData
+from forms import (
+    StockEntryForm,
+    StockUpdateForm,
+    StockDeleteForm,
+    AddLeadershipForm,
+    ManageLeadershipForm,
+)
+from functions import StockThread, socketio, thread, refresh_stock_data
 
 
 @app.route("/")
@@ -84,7 +90,43 @@ def portfolio():
 @app.route("/rawdata")
 def rawdata():
     stocks = Stocks.get()
-    return render_template("rawdata.html", stocks=stocks)
+    # uncomment to refresh data
+    # refresh_stock_data(set(stocks))
+    total = sum([stock.cost * stock.quantity for stock in stocks])
+    for stock in stocks:
+        data = CurStockData.get(name=stock.name)
+        setattr(
+            stock, "per_cost", round(((stock.cost * stock.quantity / total) * 100), 2)
+        )
+        setattr(stock, "cur_cost", data[0].cost)
+        setattr(
+            stock, "weight", round(((stock.cur_cost * stock.quantity) / total) * 100, 2)
+        )
+        setattr(
+            stock,
+            "per_gain",
+            round(((stock.cur_cost - stock.cost) / stock.cost) * 100, 2),
+        )
+        setattr(stock, "price_chg", data[0].chg)
+        if data[0].dividend:
+            setattr(stock, "dividend", data[0].dividend)
+            setattr(
+                stock,
+                "cur_yeild",
+                round(((stock.dividend * 4) / stock.cur_cost) * 100, 2),
+            )
+            setattr(stock, "ann_inc", stock.dividend * stock.quantity * 4)
+            setattr(
+                stock,
+                "yd_cost",
+                round((stock.ann_inc / (stock.cost * stock.quantity)) * 100, 2),
+            )
+        else:
+            setattr(stock, "dividend", "N/A")
+            setattr(stock, "cur_yeild", "N/A")
+            setattr(stock, "ann_inc", "N/A")
+            setattr(stock, "yd_cost", "N/A")
+    return render_template("rawdata.html", stocks=stocks, total=total)
 
 
 @app.route("/about")
@@ -93,10 +135,10 @@ def about():
     return render_template("about.html", leaders=leaders)
 
 
-@app.route("/manage-leaders", methods=['GET','POST'])
+@app.route("/manage-leaders", methods=["GET", "POST"])
 def manage_leaders():
     leaders = Leadership.get()
-    mychoices = [(leader.id,leader.name)for leader in leaders]
+    mychoices = [(leader.id, leader.name) for leader in leaders]
     prechecked = [leader.id for leader in leaders if leader.active]
     print(prechecked)
     print(mychoices)
@@ -115,7 +157,7 @@ def manage_leaders():
                 leader.active = False
         db.session.commit()
         return redirect(url_for("about"))
-    
+
     return render_template("manage-leadership.html", form=form)
 
 

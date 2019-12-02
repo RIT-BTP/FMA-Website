@@ -36,12 +36,39 @@
                 <th scope="row">{{ stock.sector }}</th>
                 <td>{{ stock.name }}</td>
                 <td>{{ stock.quantity }}</td>
-                <td>{{ stock.cost }}</td>
+                <td>${{ stock.cost }}</td>
+                <td>${{ stock.cost * stock.quantity }}</td>
+                <td>{{ stock.per_cost }}%</td>
+                <td>${{ stock.cur_cost }}</td>
+                <td>${{ stock.cur_cost*stock.quantity }}</td>
+                <td>{{ stock.weight }}%</td>
+                {% if stock.cur_cost-stock.cost > 0 %}
+                    <td style="color: green;">${{ stock.cur_cost-stock.cost }}</td>
+                {% else %}
+                    <td style="color: red;">${{ stock.cur_cost-stock.cost }}</td>
+                {% endif %}
+                {% if stock.cur_cost-stock.cost > 0 %}
+                    <td style="color: green;">${{ (stock.cur_cost-stock.cost)*stock.quantity }}</td>
+                {% else %}
+                    <td style="color: red;">${{ (stock.cur_cost-stock.cost)*stock.quantity }}</td>
+                {% endif %}
+                {% if stock.cur_cost-stock.cost > 0 %}
+                    <td style="color: green;">{{ stock.per_gain }}%</td>
+                {% else %}
+                    <td style="color: red;">{{ stock.per_gain }}%</td>
+                {% endif %}
+                <td>${{ stock.dividend }}</td>
+                <td>{{ stock.cur_yeild }}%</td>
+                <td>{{ stock.yd_cost }}%</td>
+                <td>${{ stock.ann_inc }}</td>
+                {% if stock.price_chg > 0 %}
+                    <td style="color: green;">{{ stock.price_chg }}%</td>
+                {% else %}
+                    <td style="color: red;">{{ stock.price_chg }}%</td>
+                {% endif %}
             </tr>
-
             {% endfor %}
-
         </tbody>
     </table>
-</div>
+.</div>
 {% endblock %}

@@ -1,4 +1,5 @@
-# from models import Stocks
+from models import CurStockData
+from app import db
 import numpy as np
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
@@ -41,6 +42,36 @@ class StockThread(Thread):
 def random_color(arange=(0, 256)):
     color = list(np.random.choice(range(*arange), size=3))
     return color
+
+
+def refresh_stock_data(stocks):
+    for stock in stocks:
+        print(stock)
+        stock_name = stock.name
+        exist = CurStockData.get(name=stock_name)
+        data = bsoption(stock_name)
+        data.i_scrap()
+        if exist:
+            exist = exist[0]
+            exist.cost = data.cur_price
+            exist.chg = data.d_chng
+            exist.dividend = data.dividend
+            exist.eps = data.eps
+            exist.pe = data.pe
+            exist.d_open = data.open
+            exist.d_close = data.close
+            db.session.commit()
+        else:
+            CurStockData.insert(
+                name=stock_name,
+                cost=data.cur_price,
+                chg=data.d_chng,
+                dividend=data.dividend,
+                eps=data.eps,
+                pe=data.pe,
+                d_open=data.open,
+                d_close=data.close,
+            )
 
 
 def construct_data():
@@ -98,16 +129,61 @@ class bsoption:
         price_soup = (
             self.soup.find(id="quote-header-info").contents[2].contents[0].contents
         )
-        self.cur_price = price_soup[0].text
-        self.d_chng = price_soup[1].contents[0].text
-        quote_soup = self.soup.find(id="quote-summary").contents
-        self.dividend = (
-            quote_soup[1].contents[0].contents[0].contents[5].contents[1].text
+        self.cur_price = float(price_soup[0].text.replace(",", ""))
+        self.d_chng = float(
+            price_soup[1]
+            .contents[0]
+            .text[: price_soup[1].contents[0].text.find("(") - 1]
         )
-        self.eps = quote_soup[1].contents[0].contents[0].contents[3].contents[1].text
-        self.pe = quote_soup[1].contents[0].contents[0].contents[2].contents[1].text
-        self.close = quote_soup[0].contents[0].contents[0].contents[0].contents[1].text
-        self.open = quote_soup[0].contents[0].contents[0].contents[1].contents[1].text
+        quote_soup = self.soup.find(id="quote-summary").contents
+        if "." in quote_soup[1].contents[0].contents[0].contents[5].contents[1].text:
+            print(quote_soup[1].contents[0].contents[0].contents[5].contents[1].text)
+            self.dividend = float(
+                quote_soup[1]
+                .contents[0]
+                .contents[0]
+                .contents[5]
+                .contents[1]
+                .text[
+                    : quote_soup[1]
+                    .contents[0]
+                    .contents[0]
+                    .contents[5]
+                    .contents[1]
+                    .text.find("(")
+                    - 1
+                ]
+            )
+        else:
+            self.dividend = None
+        if "." in quote_soup[1].contents[0].contents[0].contents[3].contents[1].text:
+            self.eps = float(
+                quote_soup[1].contents[0].contents[0].contents[3].contents[1].text[:-1]
+            )
+        else:
+            self.eps = None
+        if "." in quote_soup[1].contents[0].contents[0].contents[2].contents[1].text:
+            self.pe = float(
+                quote_soup[1].contents[0].contents[0].contents[2].contents[1].text
+            )
+        else:
+            self.pe = None
+        self.close = float(
+            quote_soup[0]
+            .contents[0]
+            .contents[0]
+            .contents[0]
+            .contents[1]
+            .text.replace(",", "")
+        )
+        self.open = float(
+            quote_soup[0]
+            .contents[0]
+            .contents[0]
+            .contents[1]
+            .contents[1]
+            .text.replace(",", "")
+        )
 
     def profile_scrap(self):
         html = urlopen(self.url + "/profile")
