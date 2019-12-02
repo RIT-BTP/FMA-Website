@@ -37,25 +37,42 @@
     </div>
 </div>
 
+<footer>
+    <div hidden id=equity_labels>
+        {{ equity_data['labels'] }}
+    </div>
+    <div hidden id=equity_data>
+        {{ equity_data['data'] }}
+    </div>
+    <div hidden id=asset_labels>
+        {{ asset_data['labels'] }}
+    </div>
+    <div hidden id=asset_data>
+        {{ asset_data['data'] }}
+    </div>
+</footer>
 
 <script>
-    {% for stock in stocks %}
-    labels:[{{stock.sector}}]
-    {% endfor %}
+    var equity_labels = document.getElementById('equity_labels').textContent;
+    equity_labels = equity_labels.replace(/'/g, '"');
+    equity_labels = JSON.parse(equity_labels);
+    var equity_data = document.getElementById('equity_data').textContent;
+    equity_data = equity_data.replace(/'/g, '"');
+    equity_data = JSON.parse(equity_data);
     var ctx = document.getElementById('myChart');
     var myChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['Technology','Defense','Healthcare','Financials','Consumer Goods','Automotive','Service','Energy','Precious Metals'],
+            labels: equity_labels,
             datasets: [{
-                data: [12, 19, 3, 5, 2, 3],
+                data: equity_data,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
@@ -71,13 +88,19 @@
     });
 </script>
 <script>
+    var asset_labels = document.getElementById('asset_labels').textContent;
+    asset_labels = asset_labels.replace(/'/g, '"');
+    asset_labels = JSON.parse(asset_labels);
+    var asset_data = document.getElementById('asset_data').textContent;
+    asset_data = asset_data.replace(/'/g, '"');
+    asset_data = JSON.parse(asset_data);
     var ctx = document.getElementById('assetChart');
     var myChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['Equity', 'REIT', 'Fixed Income', 'Cash', 'Gold'],
+            labels: asset_labels,
             datasets: [{
-                data: [12, 19, 3, 5,9],
+                data: asset_data,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',

@@ -22,19 +22,27 @@
         <h5><a href="{{url_for('rawdata')}}">Raw Data</a></h5>
         <h5>Ratios</h5>
         <p class="card-text">Sharpe Ratio: 107%
-        </br>Sortino Ratio: 105%
+            </br>Sortino Ratio: 105%
         </p>
         <h5>Top Performers</h5>
         <ol>
-            <li>Apple <span style="color: green;">14%</span></li>
-            <li></li>
-            <li></li>
+            {% for stock in top_per %}
+            {% if stock.chg > 0 %}
+            <li>{{stock.name}}: <span style="color: green;">{{stock.chg}}%</span></li>
+            {% else %}
+            <li>{{stock.name}}: <span style="color: red;">{{stock.chg}}%</span></li>
+            {% endif %}
+            {% endfor %}
         </ol>
         <h5>Bottom Performers</h5>
         <ol>
-            <li>Apple <span style="color: red;"> 26%</span></li>
-            <li></li>
-            <li></li>
+            {% for stock in low_per %}
+            {% if stock.chg > 0 %}
+            <li>{{stock.name}}: <span style="color: green;">{{stock.chg}}%</span></li>
+            {% else %}
+            <li>{{stock.name}}: <span style="color: red;">{{stock.chg}}%</span></li>
+            {% endif %}
+            {% endfor %}
         </ol>
     </div>
 </div>

@@ -30,7 +30,7 @@ from forms import (
     ManageLeadershipForm,
     LoginForm
 )
-from functions import StockThread, socketio, thread, refresh_stock_data, cur_state
+from functions import StockThread, socketio, thread, refresh_stock_data, cur_state, random_color
 current = cur_state()
 
 @app.context_processor
@@ -45,9 +45,46 @@ def root():
 
 @app.route("/home")
 def home():
+    stocks = Stocks.get()
+    labels = list(set([stock.sector for stock in stocks]))
+    data = []
+    colors = []
+    
     global current
-    current = cur_state()
-    return render_template("home.html")
+    total = current[0]
+    for label in labels:
+        stocks = Stocks.get(sector=label)
+        label_total = 0
+        for stock in stocks:
+            s_data = CurStockData.get(name=stock.name)
+            label_total += stock.quantity*s_data[0].cost
+        data.append(str(round(label_total/total,2)))
+    equity_data = {
+        'labels':labels,
+        'data':data
+    }
+    data = [0,0,0,0,0]
+    stocks = Stocks.get()
+    for stock in stocks:
+        s_data = CurStockData.get(name=stock.name)
+        print(data)
+        if stock.sector in ['Technology', 'Defense', 'Health Care', 'Financials', 'Consumer Goods', 'Automotive']:
+            data[0] += stock.quantity*s_data[0].cost
+            print(data)
+        elif stock.sector in ['Precious Metals']:
+            data[-1] += stock.quantity*s_data[0].cost
+        elif stock.sector in ['REITS']:
+            data[1] += stock.quantity*s_data[0].cost
+        elif stock.sector in ['Fixed Income']:
+            data[2] += stock.quantity*s_data[0].cost
+    data[-2] += 21055.23
+    data = [str(i) for i in data]
+    asset_data = {
+
+        'labels' : ['Equity', 'REIT', 'Fixed Income', 'Cash', 'Gold'],
+        'data' : data
+    }
+    return render_template("home.html", equity_data=equity_data, asset_data=asset_data)
 
 
 @app.route("/new stocks", methods=["GET", "POST"])
@@ -101,9 +138,10 @@ def delete_stocks():
 
 @app.route("/portfolio")
 def portfolio():
-    global current
-    current = cur_state()
-    return render_template("portfolio.html")
+    stocks = CurStockData.get()
+    top_per = list(sorted(stocks, key=lambda x: x.chg, reverse=True))[:3]
+    low_per = list(sorted(stocks, key=lambda x: x.chg))[:3]
+    return render_template("portfolio.html", top_per=top_per, low_per=low_per)
 
 
 @app.route("/rawdata")

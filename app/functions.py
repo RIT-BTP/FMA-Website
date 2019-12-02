@@ -40,8 +40,8 @@ class StockThread(Thread):
 
 
 def random_color(arange=(0, 256)):
-    color = list(np.random.choice(range(*arange), size=3))
-    return color
+    color = str(list(np.random.choice(range(*arange), size=3)+[1]))
+    return 'rgba'+color
 
 
 def refresh_stock_data(stocks):
