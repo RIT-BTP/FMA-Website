@@ -32,6 +32,18 @@
         <p class="card-text">Sharpe Ratio: 107%
             </br>Sortino Ratio
         </p>
+        <h5>Best Performers</h5>
+        <ol>
+            <li>Apple <span style="color: green;">14%</span></li>
+            <li></li>
+            <li></li>
+        </ol>
+        <h5>Worst Performers</h5>
+        <ol>
+            <li>Apple <span style="color: red;"> 26%</span></li>
+            <li></li>
+            <li></li>
+        </ol>
     </div>
 </div>
 
@@ -39,20 +51,21 @@
     <div class="card col-md-3" style="margin-left: 4rem; margin-top:2rem; margin-bottom: 2rem;">
         <h5 class="card-title">Top Performers</h5>
         <p class="card-text">
-            <ul>
+            <ol>
+                <li>Apple <span style="color: green;">14%</span></li>
                 <li></li>
                 <li></li>
-            </ul>
+            </ol>
         </p>
     </div>
     <div class="card col-md-3" style="margin-top:2rem; margin-bottom: 2rem;">
         <h5 class="card-title">Bottom Performers</h5>
         <p class="card-text">
-            <ul>
+            <ol>
+                <li>Apple <span style="color: red;"> $56</span></li>
                 <li></li>
                 <li></li>
-                <li></li>
-            </ul>
+            </ol>
         </p>
     </div>
     <div class="card col-md-6" style="margin-right:4rem;margin-top:2rem; margin-bottom: 2rem;">
@@ -66,34 +79,36 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for stock in stocks %}
                     <tr>
                         <th scope=”row”>Position</th>
                         <td></td>
                     </tr>
                     <tr>
-                    <th scope=”row”>Cost of Investment</th>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope=”row”>Curr. Mkt. Value</th>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope=”row”>Annual Dividend</th>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope=”row”>Total Profit</th>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope=”row”>Gain on Investment</th>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope=”row”>Total Dividend Yield</th>
-                    <td></td>
-                </tr>
+                        <th scope=”row”>Cost of Investment</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th scope=”row”>Curr. Mkt. Value</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th scope=”row”>Annual Dividend</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th scope=”row”>Total Profit</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th scope=”row”>Gain on Investment</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th scope=”row”>Total Dividend Yield</th>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
 
@@ -101,27 +116,7 @@
     </div>
 </div>
 
-<!--<div class="row" style="margin:2rem;">
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Portfolio Breakdown</h5>
-                <h5>Top Performers</h5>
-                <ul>
-                    <li></li>
-                </ul>
-                <h5>Bottom Performers</h5>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Stats</h5>
-            </div>
-        </div>
-    </div>
-</div>-->
+
 <script>
     var chart_labels = ['06:00', '09:00', '12:00', '15:00', '18:00', '21:00'];
     var temp_dataset = ['1', '8', '10', '10', '9', '7'];
