@@ -20,10 +20,10 @@
     </div>
     <div class="card col-md-3" style="margin-right:4rem; margin-top: 2rem;">
         <h5><a href="{{url_for('rawdata')}}">Raw Data</a></h5>
-        <h5>Ratios</h5>
+        <!--<h5>Ratios</h5>
         <p class="card-text">Sharpe Ratio: 107%
             </br>Sortino Ratio: 105%
-        </p>
+        </p>-->
         <h5>Top Performers</h5>
         <ol>
             {% for stock in top_per %}
@@ -44,6 +44,17 @@
             {% endif %}
             {% endfor %}
         </ol>
+        <div>
+            <h5>Admin Forms</h5>
+            <ul>
+               
+                <li><a href="{{url_for('new_stocks')}}">New Stocks</a></li>
+                <li><a href="{{url_for('update_stocks')}}">Update Stocks</a></lli>
+                <li><a href="{{url_for('delete_stocks')}}">Delete Stocks</a></li>
+                <li><a  href="{{url_for('add-leadership')}}">Add Leadership</a></li>
+                <li><a  href="{{url_for('manage-leadership')}}">Manage Leadership</a></li>
+            </ul>
+        </div>
     </div>
 </div>
 <!--
