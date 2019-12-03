@@ -61,7 +61,7 @@
 <footer>
     <div id='labels' hidden>
         {%- for i in history -%}
-        formatDate({{- i.date -}})
+        {{- i.date -}}
         {%- if history|length != loop.index -%}
         ,
         {%- endif -%}
