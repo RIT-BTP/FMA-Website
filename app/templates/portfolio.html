@@ -61,7 +61,7 @@
 <footer>
     <div id='labels' hidden>
         {%- for i in history -%}
-        {{- i.date -}}
+        formatDate({{- i.date -}})
         {%- if history|length != loop.index -%}
         ,
         {%- endif -%}
@@ -76,7 +76,17 @@
         {%- endfor -%}
     </div>
 </footer>
-
+<script>
+    function formatDate(d){
+  var year = d.getFullYear();
+  var month = addLeadingZero(d.getMonth());
+  var day = addLeadingZero(d.getDay());
+  var hours = d.getHours();
+  var minutes = d.getMinutes();
+  var seconds = d.getSeconds();
+  return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds
+}
+</script>
 <script>
     var labels = document.getElementById('labels').textContent;
     labels = labels.replace(/'/g, '"');
