@@ -75,10 +75,12 @@ def refresh_stock_data(stocks):
 
 def cur_state():
     stocks = Stocks.get()
-    past_total = History.get(date=date.today()-timedelta(days=1))[0]
+    past_total = History.get(date=date.today()-timedelta(days=1))
     if not past_total:
         record_history()
         past_total = History.get(date=date.today()-timedelta(days=1))[0]
+    else:
+        past_total = past_total[0]
     total = 0
     for stock in stocks:
         data = CurStockData.get(name=stock.name)[0]

@@ -44,17 +44,19 @@
             {% endif %}
             {% endfor %}
         </ol>
+        {% if current_user.is_anonymous %}
+        {% else %}
         <div>
             <h5>Admin Forms</h5>
             <ul>
-               
                 <li><a href="{{url_for('new_stocks')}}">New Stocks</a></li>
                 <li><a href="{{url_for('update_stocks')}}">Update Stocks</a></lli>
                 <li><a href="{{url_for('delete_stocks')}}">Delete Stocks</a></li>
-                <li><a  href="{{url_for('add-leadership')}}">Add Leadership</a></li>
-                <li><a  href="{{url_for('manage-leadership')}}">Manage Leadership</a></li>
+                <li><a  href="{{url_for('add_leaders')}}">Add Leadership</a></li>
+                <li><a  href="{{url_for('manage_leaders')}}">Manage Leadership</a></li>
             </ul>
         </div>
+        {% endif %}
     </div>
 </div>
 <!--

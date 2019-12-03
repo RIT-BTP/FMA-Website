@@ -2,7 +2,7 @@ from flask import Flask, request, redirect, render_template, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO, emit
 import flask_login
-from flask_login import current_user, login_user, login_required, LoginManager
+from flask_login import current_user, login_user, login_required, LoginManager, logout_user
 import os
 import base64
 import datetime
@@ -67,10 +67,8 @@ def home():
     stocks = Stocks.get()
     for stock in stocks:
         s_data = CurStockData.get(name=stock.name)
-        print(data)
         if stock.sector in ['Technology', 'Defense', 'Health Care', 'Financials', 'Consumer Goods', 'Automotive']:
             data[0] += stock.quantity*s_data[0].cost
-            print(data)
         elif stock.sector in ['Precious Metals']:
             data[-1] += stock.quantity*s_data[0].cost
         elif stock.sector in ['REITS']:
@@ -277,4 +275,4 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
