@@ -11,7 +11,6 @@
     <div class="card col-md-9" style="margin-left:4rem; margin-right:2rem; margin-top: 2rem;">
         <h5 class="card-title">Portfolio Value</h5>
         <div class="card-body">
-            <button id="0" type="button">1 Day</button>
             <button id="1" type="button">1 Week</button>
             <button id="2" type="button">1 Month</button>
             <button id="3" type="button">1 Year</button>
@@ -59,77 +58,36 @@
         {% endif %}
     </div>
 </div>
-<!--
-<div class="card-deck">
-    <div class="card col-md-3" style="margin-left: 4rem; margin-top:2rem; margin-bottom: 2rem;">
-        <h5 class="card-title">Top Performers</h5>
-        <p class="card-text">
-            <ol>
-                <li>Apple <span style="color: green;">14%</span></li>
-                <li></li>
-                <li></li>
-            </ol>
-        </p>
+<footer>
+    <div id='labels' hidden>
+        {%- for i in history -%}
+        {{- i.date -}}
+        {%- if history|length != loop.index -%}
+        ,
+        {%- endif -%}
+        {%- endfor -%}
     </div>
-    <div class="card col-md-3" style="margin-top:2rem; margin-bottom: 2rem;">
-        <h5 class="card-title">Bottom Performers</h5>
-        <p class="card-text">
-            <ol>
-                <li>Apple <span style="color: red;"> $56</span></li>
-                <li></li>
-                <li></li>
-            </ol>
-        </p>
+    <div id='data' hidden>
+        {%- for i in history -%}
+        {{- i.total -}}
+        {%- if history|length != loop.index -%}
+        ,
+        {%- endif -%}
+        {%- endfor -%}
     </div>
-    <div class="card col-md-6" style="margin-right:4rem;margin-top:2rem; margin-bottom: 2rem;">
-        <h5 class="card-title">Stats</h5>
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover table-sm" style="margin:2rem;">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Total</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope=”row”>Position</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th scope=”row”>Cost of Investment</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th scope=”row”>Curr. Mkt. Value</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th scope=”row”>Annual Dividend</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th scope=”row”>Total Profit</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th scope=”row”>Gain on Investment</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th scope=”row”>Total Dividend Yield</th>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </div>
-    </div>
-</div>-->
+</footer>
 
 <script>
-    var chart_labels = ['06:00', '09:00', '12:00', '15:00', '18:00', '21:00'];
-    var port_dataset = ['1', '8', '10', '10', '9', '7'];
+    var labels = document.getElementById('labels').textContent;
+    labels = labels.replace(/'/g, '"');
+    labels = labels.split(',')
+    var data = document.getElementById('data').textContent;
+    data = data.replace(/'/g, '"');
+    data = data.split(',')
+    var total_data = data
+    var total_labels = labels
+    var chart_labels = total_labels.slice(0,8).reverse();
+    var port_dataset = total_data.slice(0,8).reverse();
     var ctx = document.getElementById("forecast").getContext('2d');
     var config = {
         type: 'bar',
@@ -153,31 +111,23 @@
         }
     };
     var forecast_chart = new Chart(ctx, config);
-    $("#0").click(function () {
-        var data = forecast_chart.config.data;
-        data.datasets[0].data = port_dataset;
-        data.labels = chart_labels;
-        forecast_chart.update();
-    });
     $("#1").click(function () {
-        var chart_labels = ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'];
-        var port_dataset = ['5', '3', '4', '8', '10', '11', '10', '9'];
         var data = forecast_chart.config.data;
         data.datasets[0].data = port_dataset;
         data.labels = chart_labels;
         forecast_chart.update();
     });
     $("#2").click(function () {
-        var chart_labels = ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'];
-        var port_dataset = ['5', '3', '4', '8', '10', '11', '10', '9'];
+        var chart_labels = total_labels.slice(0,31).reverse();
+        var port_dataset = total_data.slice(0,31).reverse();
         var data = forecast_chart.config.data;
         data.datasets[0].data = port_dataset;
         data.labels = chart_labels;
         forecast_chart.update();
     });
     $("#3").click(function () {
-        var chart_labels = ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'];
-        var port_dataset = ['5', '3', '7', '8', '20', '11', '10', '9'];
+        var chart_labels = total_labels.slice(0,366).reverse();
+        var port_dataset = total_data.slice(0,366).reverse();
         var data = forecast_chart.config.data;
         data.datasets[0].data = port_dataset;
         data.labels = chart_labels;

@@ -21,7 +21,7 @@ app.config.from_object(os.environ["APP_SETTINGS"])
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
-from models import Stocks, Leadership, CurStockData, User
+from models import Stocks, Leadership, CurStockData, User, History
 from forms import (
     StockEntryForm,
     StockUpdateForm,
@@ -82,7 +82,26 @@ def home():
         'labels' : ['Equity', 'REIT', 'Fixed Income', 'Cash', 'Gold'],
         'data' : data
     }
-    return render_template("home.html", equity_data=equity_data, asset_data=asset_data)
+    history = History.get()
+    history = list(sorted(history, key=lambda x: x.date))
+    date = [str(h.date) for h in history]
+    total = []
+    sp500 = []
+    for i,h in enumerate(history):
+        if i!=0:
+            total.append(total[i-1]+((h.total/history[i-1].total)-1)*100)
+            sp500.append(sp500[i-1]+((h.sp500/history[i-1].sp500)-1)*100)
+        else:
+            total.append(0)
+            sp500.append(0)
+    total = list(map(str,total))
+    sp500 = list(map(str,sp500))
+    line_data = {
+        'dates' : date,
+        'totals' : total,
+        'sp500' : sp500
+    }
+    return render_template("home.html", equity_data=equity_data, asset_data=asset_data, line_data=line_data)
 
 
 @app.route("/new stocks", methods=["GET", "POST"])
@@ -139,7 +158,9 @@ def portfolio():
     stocks = CurStockData.get()
     top_per = list(sorted(stocks, key=lambda x: x.chg, reverse=True))[:3]
     low_per = list(sorted(stocks, key=lambda x: x.chg))[:3]
-    return render_template("portfolio.html", top_per=top_per, low_per=low_per)
+    history = History.get()
+    history = list(sorted(history, key=lambda x: x.date, reverse=True))
+    return render_template("portfolio.html", top_per=top_per, low_per=low_per, history=history)
 
 
 @app.route("/rawdata")
@@ -196,8 +217,6 @@ def manage_leaders():
     leaders = Leadership.get()
     mychoices = [(leader.id, leader.name) for leader in leaders]
     prechecked = [leader.id for leader in leaders if leader.active]
-    print(prechecked)
-    print(mychoices)
     form = ManageLeadershipForm(request.form)
     form.active.choices = mychoices
     form.active.coerce = str

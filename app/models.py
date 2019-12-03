@@ -121,10 +121,12 @@ class History(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, default=date.today())
     total = db.Column(db.Numeric(100, 2), nullable=False)
+    sp500 = db.Column(db.Numeric(100,2))
 
-    def __init__(self, total, date):
+    def __init__(self, total, date, sp500):
         self.total = total
         self.date = date
+        self.sp500 = sp500
 
     # def __repr__(self):
     #     return "<id {}, name {}>".format(self.id, self.name)

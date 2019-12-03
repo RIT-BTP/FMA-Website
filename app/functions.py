@@ -1,15 +1,16 @@
-from models import CurStockData, Stocks, History
-from app import db
-import numpy as np
+from datetime import date, datetime, timedelta
+from threading import Event, Thread
+from time import sleep
 from urllib.request import urlopen
-from bs4 import BeautifulSoup
-from datetime import datetime, date, timedelta
+
+import numpy as np
 import pandas as pd
 import pandas_datareader as pdr
-from threading import Thread, Event
-from app import app
+from bs4 import BeautifulSoup
 from flask_socketio import SocketIO, emit
-from time import sleep
+
+from app import app, db
+from models import CurStockData, History, Stocks
 
 thread = Thread()
 thread_stop_event = Event()
@@ -76,9 +77,11 @@ def refresh_stock_data(stocks):
 def cur_state():
     stocks = Stocks.get()
     past_total = History.get(date=date.today()-timedelta(days=1))
-    if not past_total:
+    if not past_total and datetime.now().hour > 8:
         record_history()
         past_total = History.get(date=date.today()-timedelta(days=1))[0]
+    elif not past_total:
+        past_total = History.get(date=date.today()-timedelta(days=2))[0]
     else:
         past_total = past_total[0]
     total = 0
@@ -95,7 +98,28 @@ def record_history():
     for stock in stocks:
         data = CurStockData.get(name=stock.name)[0]
         total += stock.quantity*data.d_close
-    History.insert(total=total, date=date.today()-timedelta(days=1))
+    stock = bsoption()
+    History.insert(total=total, date=date.today()-timedelta(days=1), sp500=float(sp500_cost))
+
+
+def create_history():
+    stocks = Stocks.get()
+    totals = []
+    for stock in stocks:
+        s_data = bsoption(stock.name)
+        setattr(stock, 'data', s_data.history(datetime.now()-timedelta(days=365), datetime.now()))
+        cols, rows = stock.data.shape
+        for i,col in enumerate(range(cols)):
+            if len(totals) == cols:
+                totals[i] += stock.quantity * stock.data.iloc[i,2]
+            else:
+                totals.append(stock.quantity * stock.data.iloc[i,2])
+    h_data = bsoption('^GSPC')
+    df = h_data.history(datetime.now()-timedelta(days=365), datetime.now())
+    cols, rows  = df.shape
+    for i, col in enumerate(range(cols)):
+        History.insert(date=datetime.now()-timedelta(days=365-i), total=totals[i], sp500=df.iloc[i,2])
+    
 
 
 
@@ -141,6 +165,7 @@ def construct_data():
 
 class bsoption:
     def __init__(self, stock=None):
+        self.stock = stock
         if stock:
             self.url = f"https://finance.yahoo.com/quote/{stock}"
             html = urlopen(self.url)
@@ -224,6 +249,14 @@ class bsoption:
             .contents[4]
             .text
         )
+        self.sp500_cost = (
+            self.soup.find(id="market-summary")
+            .contents[0]
+            .contents[0]
+            .contents[0]
+            .contents[3]
+            .text.replace(',','')
+        )
         self.dow = (
             self.soup.find(id="market-summary")
             .contents[0]
@@ -241,11 +274,11 @@ class bsoption:
             .text
         )
 
-    def test(self):
-        df = pdr.get_data_yahoo("aapl", datetime(2018, 1, 1), datetime.now())
-        print(df)
+    def history(self, start, end=datetime.now()):
+        df = pdr.get_data_yahoo(self.stock, start, end)
+        return df
 
-    def history(self, start, end=None):
+    def old_history(self, start, end=None):
         if not end:
             end = datetime.now()
         html = urlopen(
@@ -286,9 +319,12 @@ class apioption:
 
 
 if __name__ == "__main__":
-    bs = bsoption()
-    print(bs.dow)
-    # bs.test()
-    # bs.history(datetime(2018,1,1))
+    create_history()
+    # bs = bsoption('^GSPC')
+    # # bs.test()
+    # x = bs.history(datetime.now()-timedelta(weeks=52), datetime.now())
+    # print(x.head())
+    # print(x.shape)
+    # print(type(x.iloc[0,0]))
     # bs.i_scrap()
     # print(bs)

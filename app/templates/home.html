@@ -50,6 +50,15 @@
     <div hidden id=asset_data>
         {{ asset_data['data'] }}
     </div>
+    <div hidden id='sp500'>
+        {{ line_data['sp500']}}
+    </div>
+    <div hidden id='totals'>
+        {{ line_data['totals']}}
+    </div>
+    <div hidden id='dates'>
+        {{ line_data['dates']}}
+    </div>
 </footer>
 
 <script>
@@ -109,17 +118,26 @@
 </script>
 
 <script>
+    var sp500 = document.getElementById('sp500').textContent;
+    sp500 = sp500.replace(/'/g, '"');
+    sp500 = JSON.parse(sp500);
+    var totals = document.getElementById('totals').textContent;
+    totals = totals.replace(/'/g, '"');
+    totals = JSON.parse(totals);
+    var dates = document.getElementById('dates').textContent;
+    dates = dates.replace(/'/g, '"');
+    dates = JSON.parse(dates);
     new Chart(document.getElementById("linechartdf"), {
         type: 'line',
         data: {
-            labels: [1500, 1600, 1700, 1750, 1800, 1850, 1900, 1950, 1999, 2050],
+            labels: dates,
             datasets: [{
-                data: [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478],
+                data: sp500,
                 label: "S&P 500",
                 borderColor: "#3e95cd",
                 fill: false
             }, {
-                data: [168, 170, 178, 190, 203, 276, 408, 547, 675, 734],
+                data: totals,
                 label: "FMA Portfolio",
                 borderColor: "#3cba9f",
                 fill: false
@@ -131,7 +149,7 @@
                 yAxes: [{
                     ticks: {
                         suggestedMin: 0,
-                        suggestedMax: 3000
+                        suggestedMax: 1
                     }
                 }]
             }
