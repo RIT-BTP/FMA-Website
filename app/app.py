@@ -156,8 +156,8 @@ def delete_stocks():
 @app.route("/portfolio")
 def portfolio():
     stocks = CurStockData.get()
-    top_per = list(sorted(stocks, key=lambda x: x.chg, reverse=True))[:3]
-    low_per = list(sorted(stocks, key=lambda x: x.chg))[:3]
+    top_per = list(sorted(stocks, key=lambda x: x.chg/x.cost, reverse=True))[:3]
+    low_per = list(sorted(stocks, key=lambda x: x.chg/x.cost))[:3]
     history = History.get()
     history = list(sorted(history, key=lambda x: x.date, reverse=True))
     return render_template("portfolio.html", top_per=top_per, low_per=low_per, history=history)

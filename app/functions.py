@@ -19,7 +19,7 @@ socketio = SocketIO(app)
 
 class StockThread(Thread):
     def __init__(self):
-        self.delay = 10
+        self.delay = 60
         super(StockThread, self).__init__()
 
     def randomNumberGenerator(self):
@@ -88,7 +88,8 @@ def cur_state():
     for stock in stocks:
         data = CurStockData.get(name=stock.name)[0]
         total += stock.quantity*data.cost
-    return (total, round(((total/past_total.total)-1)*100),2)
+    print(round(((total/past_total.total)-1)*100,2))
+    return (total, round(((total/past_total.total)-1)*100,2))
 
 
 def record_history():

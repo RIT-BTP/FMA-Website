@@ -62,9 +62,9 @@
                 <td>{{ stock.yd_cost }}%</td>
                 <td>${{ stock.ann_inc }}</td>
                 {% if stock.price_chg > 0 %}
-                    <td style="color: green;">{{ stock.price_chg }}%</td>
+                    <td style="color: green;">${{ stock.price_chg}}</td>
                 {% else %}
-                    <td style="color: red;">{{ stock.price_chg }}%</td>
+                    <td style="color: red;">${{ stock.price_chg }}</td>
                 {% endif %}
             </tr>
             {% endfor %}
