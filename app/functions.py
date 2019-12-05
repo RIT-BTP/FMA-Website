@@ -100,7 +100,7 @@ def record_history():
         data = CurStockData.get(name=stock.name)[0]
         total += stock.quantity*data.d_close
     stock = bsoption()
-    History.insert(total=total, date=date.today()-timedelta(days=1), sp500=float(sp500_cost))
+    History.insert(total=total, date=date.today()-timedelta(days=1), sp500=float(stock.sp500_cost))
 
 
 def create_history():
